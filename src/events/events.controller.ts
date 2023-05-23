@@ -4,6 +4,7 @@ import { Like, MoreThan, Repository } from "typeorm";
 import { CreateEventDto } from './create-event.dto';
 import { Event } from './event.entity';
 import { UpdateEventDto } from "./update-event.dto";
+import { Attendee } from "./attendee.entity";
 
 @Controller('/events')
 export class EventsController {
@@ -11,7 +12,10 @@ export class EventsController {
 
     constructor(
         @InjectRepository(Event)
-        private readonly repository: Repository<Event>
+        private readonly repository: Repository<Event>,
+
+        @InjectRepository(Attendee)
+        private readonly attendeeRepository: Repository<Attendee>
     ) { }
 
     @Get()
@@ -41,6 +45,49 @@ export class EventsController {
             }
         });
     }
+
+
+    @Get('/practice2')
+    async practice2() {
+        // return await this.repository.findOne({
+        //     relations: ['attendees'],
+        // where: {
+        //     id: 1
+        // },
+        // })
+
+        // const event = await this.repository.findOne({ relations: ['attendees'], where: { id: 3 } })
+        // console.log('event', event);
+        // const attendee = new Attendee()
+        // attendee.id = 5
+        // attendee.name = 'Mehmet Serhat'
+        // attendee.event = event
+
+        // await this.attendeeRepository.save(attendee)
+        // return event
+
+        const attendee = new Attendee()
+        // attendee.id = 66
+        attendee.name = 'Meliha 2'
+
+        const event = new Event()
+        // event.id = 12
+        event.name = 'Work in garden 2'
+        event.address = "Hollenbach"
+        event.description = "Planting the flower"
+        event.when = new Date()
+        event.attendees = [attendee]
+
+        try {
+            await this.repository.save(event)
+        } catch (error) {
+            console.log('error saving event', error);
+        }
+
+        return event
+    }
+
+
 
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id) {
