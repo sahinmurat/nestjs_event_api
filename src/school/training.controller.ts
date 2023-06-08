@@ -18,7 +18,9 @@ export class TrainingController {
     // const subject = new Subject();
     // subject.name = 'Math';
 
-    const subject = await this.subjectRepository.findOne(3);
+    const subject = await this.subjectRepository.findOne({
+      where: { id: 3 }
+    });
 
     // const teacher1 = new Teacher();
     // teacher1.name = 'John Doe';
@@ -38,8 +40,12 @@ export class TrainingController {
     // Save the user here
 
 
-    const teacher1 = await this.teacherRepository.findOne(5);
-    const teacher2 = await this.teacherRepository.findOne(6);
+    const teacher1 = await this.teacherRepository.findOne({
+      where: { id: 5 }
+    });
+    const teacher2 = await this.teacherRepository.findOne({
+      where: { id: 6 }
+    });
 
     return await this.subjectRepository
       .createQueryBuilder()
