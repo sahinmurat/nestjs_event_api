@@ -1,17 +1,47 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Event } from "./event.entity";
+import { Expose } from 'class-transformer';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './../auth/user.entity';
+import { Event } from './event.entity';
+
+export enum AttendeeAnswerEnum {
+  Accepted = 1,
+  Maybe,
+  Rejected,
+}
 
 @Entity()
 export class Attendee {
-    @PrimaryGeneratedColumn()
-    // auto-generated
-    id: number;
+  @PrimaryGeneratedColumn()
+  @Expose()
+  id: number;
 
-    @Column()
-    name: string;
+  @ManyToOne(() => Event, (event) => event.attendees, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  event: Event;
 
-    @ManyToOne(() => Event, (event) => event.attendees, {
-        nullable: false
-    })
-    event: Event;
+  @Column()
+  eventId: number;
+
+  @Column('enum', {
+    enum: AttendeeAnswerEnum,
+    default: AttendeeAnswerEnum.Accepted,
+  })
+  @Expose()
+  answer: AttendeeAnswerEnum;
+
+  @ManyToOne(() => User, (user) => user.attended)
+  @Expose()
+  user: User;
+
+  @Column()
+  userId: number;
 }

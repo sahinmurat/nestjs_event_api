@@ -1,5 +1,5 @@
 version: "3.8"
-# on localhost: http://localhost:8080 you can reach DB adminer. There can be found all DBs and tables and you can edit them.
+
 services:
   mysql:
     image: mysql:8.0.23
