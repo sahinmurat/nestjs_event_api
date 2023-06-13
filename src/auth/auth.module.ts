@@ -13,7 +13,7 @@ import { User } from './user.entity';
         TypeOrmModule.forFeature([User, Attendee]),
         JwtModule.registerAsync({
             useFactory: () => ({
-                secret: 'process.env.JWT_SECRET',
+                secret: process.env.JWT_SECRET,
                 signOptions: { expiresIn: '60m' }
             })
         })
